@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import Loginpage from './components/Login-page';
 import Sendstudydocument from "./components/send-study-document"
 import Profile from './components/Profile';
+import Loginpage_client from './components/Login-page_Client';
 function App() {
   return (
     <>
@@ -21,6 +22,7 @@ function App() {
         <Route path="/login" element={<Loginpage />} />
         <Route path="/Sendstudydocument/:id" element={<Sendstudydocument />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/signin" element={<Loginpage_client />} />
 
 
 

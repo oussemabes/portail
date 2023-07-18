@@ -7,8 +7,8 @@ export default function Card() {
         <div class="card h-100" style={{maxWidth:"450px"}}>
            
             <div class="card-body">
-                <h5 class="card-title">Consent  (study 1)</h5>
-                <p class="card-text fw-bold mb-4">From patient ref : 25144</p>
+                <h5 class="card-title">Study 1</h5>
+                <p class="card-text fw-bold mb-4">Participants : 20</p>
                 <a href="#" class="btn btn-primary">Show details</a>
             </div>
         </div>
