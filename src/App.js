@@ -10,6 +10,7 @@ import Loginpage from './components/Login-page';
 import Sendstudydocument from "./components/send-study-document"
 import Profile from './components/Profile';
 import Loginpage_client from './components/Login-page_Client';
+import CreateEvent from './components/Create-participants';
 function App() {
   return (
     <>
@@ -23,6 +24,7 @@ function App() {
         <Route path="/Sendstudydocument/:id" element={<Sendstudydocument />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/signin" element={<Loginpage_client />} />
+        <Route path="/invit" element={<CreateEvent/>} />
 
 
 
