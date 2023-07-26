@@ -28,7 +28,7 @@ export default function TableParticipatedStudies(props) {
         return normalizedDate.toDateString(); // Convert to string using .toDateString()
       }
 
-    const accept = async (study_id,user_id,e) => {
+    const accept = async (study_id,user_id,id,e) => {
         const token = localStorage.getItem('token'); //
 
         // Set the headers with the token
@@ -38,7 +38,7 @@ export default function TableParticipatedStudies(props) {
         };
         e.preventDefault();
         try {
-          await axios.patch(`http://localhost:3001/backend/participants/update/${user_id}/${study_id}`, {
+          await axios.patch(`http://localhost:3001/backend/participants/update/${user_id}/${study_id}/${id}`, {
             state:"accept"
           },{headers});
           window.location.href="/"
@@ -49,7 +49,7 @@ export default function TableParticipatedStudies(props) {
         }
       };
 
-      const refuse = async (study_id,user_id,e) => {
+      const refuse = async (study_id,user_id,id,e) => {
         const token = localStorage.getItem('token'); //
 
         // Set the headers with the token
@@ -59,7 +59,7 @@ export default function TableParticipatedStudies(props) {
         };
         e.preventDefault();
         try {
-          await axios.patch(`http://localhost:3001/backend/participants/update/${user_id}/${study_id}`, {
+          await axios.patch(`http://localhost:3001/backend/participants/update/${user_id}/${study_id}/${id}`, {
             state:"refuse"
           },{headers});
           window.location.href="/"
@@ -95,11 +95,11 @@ export default function TableParticipatedStudies(props) {
             <td><a href={participantedstudy.document} >click here</a></td>
             <td>            {participantedstudy.state === 'pending' ? (
                 <div className="d-flex text-center ml-0 pl-0 icons">
-                            <a title='accept' href='/'  onClick={(e) => accept(participantedstudy.study_id, participantedstudy.user_id, e)}><h3 className="text-center"><TiTick style={{ color: "black" }} /> </h3></a>
-                           <a title='refuse' href='/' onClick={(e) => refuse(participantedstudy.study_id, participantedstudy.user_id, e)}> <h3 className="text-center"><GiCancel style={{ color: "black" }} /> </h3></a>
+                            <a title='accept' href='/'  onClick={(e) => accept(participantedstudy.study_id, participantedstudy.user_id,participantedstudy.id, e)}><h3 className="text-center"><TiTick style={{ color: "black" }} /> </h3></a>
+                           <a title='refuse' href='/' onClick={(e) => refuse(participantedstudy.study_id, participantedstudy.user_id,participantedstudy.id, e)}> <h3 className="text-center"><GiCancel style={{ color: "black" }} /> </h3></a>
                             </div>
                         ) : participantedstudy.state === 'accept' ? (
-                              <button type="button" class="btn btn-danger" onClick={(e) => refuse(participantedstudy.study_id, participantedstudy.user_id, e)}>Remove acces</button>
+                              <button type="button" class="btn btn-danger" onClick={(e) => refuse(participantedstudy.study_id, participantedstudy.user_id,participantedstudy.id, e)}>Remove acces</button>
                         ) : (
                             <h3><TbXboxX style={{ color: "black" }} /> </h3>
                         )}</td>

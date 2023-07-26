@@ -15,7 +15,7 @@ export default function Tableusers(props) {
     <thead>
         <tr>
             <th scope="col" style={{ color: "black" }}>#</th>
-            <th scope="col" style={{ color: "black" }}>name</th>
+            <th scope="col" style={{ color: "black" }}>Patient reference</th>
             <th scope="col" style={{ color: "black" }}>Details</th>
             <th scope="col" style={{ color: "black" }}>Commentaires</th>
             <th scope="col" style={{ color: "black" }}>send study document</th>
@@ -25,7 +25,7 @@ export default function Tableusers(props) {
         {props.users.map((user) => (
         <tr>
             <td><span style={{ color: "black" }}>{user.id}</span></td>
-            <td><span style={{ color: "black" }}>{user.name}</span></td>
+            <td><span style={{ color: "black" }}>{user.ref}</span></td>
             <td><h3><FaEye style={{ color: "black" }} user_id={user.id} /> </h3></td>
             <td><h3><BiCommentDots style={{ color: "#172B4D" }} /> </h3></td>
             <td>  <a href={Link(user.id)} ><h3> <FaFileUpload style={{color:"black"}}>Send Invitation</FaFileUpload></h3> </a> </td>

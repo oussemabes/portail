@@ -60,7 +60,7 @@ export default function TableParticipants(props) {
                 {props.participants.map((participant) => (
                     <tr>
                         <td><span style={{ color: "black" }}>{participant.id}</span></td>
-                        <td><span style={{ color: "black" }}>{participant.user_id}</span></td>
+                        <td><span style={{ color: "black" }}>{participant.ref}</span></td>
                         <td><span style={{ color: "black" }}>{props.study}</span></td>
 
                         <td>            {participant.state === 'pending' ? (

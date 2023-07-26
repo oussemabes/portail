@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios"
 import PaginationControls from "./pagination";
 import Card from './Card';
-import Tableusers from "./Table-users";
+import Tableusers from "./Table-patient";
 import { useNavigate } from 'react-router-dom';
 
 export default function Homepage() {
