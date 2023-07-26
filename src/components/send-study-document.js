@@ -1,19 +1,104 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios"
 
 export default function Sendstudydocument() {
+    let { id } = useParams();
+    console.log(id)
+    const [studies, setStudies] = useState([]);
+    const [error, setError] = useState(null);
+    const [study, setStudy] = React.useState("");
+    const [idstudy, setIdtsudy] = React.useState("");
+
+    const [productFile, setProductFile] = React.useState();
+    const [productFilename, setProductFilename] = React.useState("");
+    const [productFileBack, setProductFileBack] = React.useState("");
+
+    const [requestDate, setRequestDate] = React.useState("");
+    const hiddenFileInput = React.useRef(null);
+    const handleClick = (event) => {
+        event.preventDefault();
+        hiddenFileInput.current?.click();
+      };
+      const handleChange = (event) => {
+        event.preventDefault();
+        const fileUploaded = event.target.files[0];
+        setProductFile(URL.createObjectURL(fileUploaded));
+        setProductFilename(event.target.files[0].name);
+        setProductFileBack(event.target.files[0]);
+      };
+    useEffect(() => {
+        const token = localStorage.getItem('token'); //
+
+        // Set the headers with the token
+        const headers = {
+            'Authorization': `Bearer ${token}`, // Include the 'Bearer' prefix for JWT token
+            'Content-Type': 'application/json',
+        };
+
+        axios
+            .get(
+                `http://localhost:3001/backend/studies/displayall`
+                , { headers })
+            .then((res) => { setStudies(res.data); console.log(res.data) })
+            .catch((err) => setError(err));
+    }, []);
+
+    async function addParticipants(e) {
+        const token = localStorage.getItem('token'); //
+
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString();
+
+
+console.log(currentDate)
+        const formData = new FormData();
+        await formData.append("user_id", id);
+        await formData.append("study_id", idstudy);
+        await formData.append("state", "pending");
+
+        await formData.append("document", productFileBack);
+        await formData.append("date", formattedDate);
+    
+        e.preventDefault();
+        
+        
+    
+        //foncti
+    
+        await axios.post(
+          `http://localhost:3001/backend/participants/create`,
+    
+          formData,
+          {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
+              
+            },
+          }
+        );
+        console.log(formData)
+        window.location.href = "/";
+
+      if (error) {
+        return <div>Error: {error.message}</div>;
+      }
+    }
+
     return (
         <>
 
-            <section className="home mt-4 mt-3 pt-3 pb-3" style={{height:"450px"}}>
-                
-            <nav aria-label="breadcrumb" class="main-breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-        
-              <li class="breadcrumb-item active" aria-current="page">Send study document</li>
-              
-            </ol>
-          </nav>
+            <section className="home mt-4 mt-3 pt-3 pb-3" style={{ height: "450px" }}>
+
+                <nav aria-label="breadcrumb" class="main-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+
+                        <li class="breadcrumb-item active" aria-current="page">Send study document</li>
+
+                    </ol>
+                </nav>
                 <div class="row">
                     <div class="col-md-6">
                         <div className="  py-3 ms-auto px-3">
@@ -29,13 +114,35 @@ export default function Sendstudydocument() {
                                         <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="25412" />
                                     </div>
                                 </div>
-                                <div class="mb-3 row ">
+                                <label>Select study</label>
+
+                                <select
+                                    name="productCategory"
+                                    value={study}
+                                    onChange={(event) => {
+                                        setStudy(event.target.value);
+                                        const selectedId = event.target.options[event.target.selectedIndex].id;
+                                        setIdtsudy(selectedId)
+
+                                    }}
+                                >
+                                    <option value="" disabled>
+                                        Select study
+                                    </option>
+                                    {studies.map((study) => (
+                                        <option key={study.id} value={study.name} id={study.id}>
+                                            {study.name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div class="mb-3 row mt-3 pt-3 ">
                                     <label for="formFile" class="form-label">Select study document</label>
-                                    <input class="form-control " type="file" id="formFile" style={{ width: "50%" }} />
+                                    <input class="form-control " type="file" id="formFile" style={{ width: "50%" }} onChange={handleChange}         ref={hiddenFileInput}
+ />
                                 </div>
 
                             </div>
-                            <button type="submit" class="btn btn-primary" style={{ width: '50%' }}>Send</button>
+                            <button type="submit" class="btn btn-primary" style={{ width: '50%' }} onClick={addParticipants}>Send</button>
                         </form>
                         <div class="dropdown-divider"></div>
                     </div>

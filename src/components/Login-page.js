@@ -1,6 +1,46 @@
 import React from 'react'
+import { useState } from "react";
+import { toast } from "react-hot-toast";
+import Axios from "axios";
 
 export default function Loginpage() {
+    const [formValue, setFormValue] = useState({
+        email: "",
+        password: "",
+      });
+    const [isLoggedIn, setisLoggedIn] = React.useState(false);
+    const LoginUser = async (e) => {
+        e.preventDefault();
+        try {
+          const resp = await Axios.post(`http://localhost:3001/backend/user/logiN`, {
+            email: formValue.email,
+            password: formValue.password,
+          });
+    
+          if (resp.data) {
+            
+            localStorage.setItem("token", resp.data);
+            setisLoggedIn(true);
+            toast.success("Welcome back :)", {
+              position: "bottom-center",
+              duration: 5000,
+            });
+          }
+        } catch (error) {
+          if (error.response) {
+            console.log(error)
+            toast.error("Please enter a valid Email/Password");
+          }
+        }
+      };
+      const onChange = (e) => {
+        setFormValue({ ...formValue, [e.target.name]: e.target.value });
+      };
+      React.useEffect(() => {
+        if (isLoggedIn) {
+          window.location.href = "/";
+        }
+      }, [isLoggedIn]);  
     return (
         <>
             <section className="home mt-4 mt-3 pt-3 pb-3">
@@ -14,15 +54,33 @@ export default function Loginpage() {
                     <div class="col-md-6 ml-4">
                         <form class="px-4 py-3 mt-6  pt-5 needs-validation" >
                             <div class="mb-3">
-                                <label for="validationCustom01" class="form-label is-required">First name</label>
-                                <input type="text" class="form-control" id="validationCustom01" placeholder='Email' style={{ width: "75%" }} required />
+                                <label for="validationCustom01" class="form-label is-required">Email</label>
+                                <input 
+                                type="email"
+                                name="email"
+                                class="form-control"
+                                id="validationCustom01"
+                                placeholder='Email' 
+                                style={{ width: "75%" }} 
+                                value={formValue.email}           
+                                onChange={onChange}
+                                required />
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label for="exampleDropdownFormPassword1" class="form-label is-required">Password</label>
-                                <input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password" style={{ width: "75%" }} required />
+                                <input 
+                                type="password"
+                                name="password"
+                                onChange={onChange}
+                                value={formValue.password}
+                                class="form-control" 
+                                id="exampleDropdownFormPassword1" 
+                                placeholder="Password" 
+                                style={{ width: "75%" }} 
+                                required />
                             </div>
                             <div class="mb-3">
                                 <div class="form-check">
@@ -34,7 +92,10 @@ export default function Loginpage() {
                             </div>
                             <a class="dropdown-item" href="#">Forgot password?</a>
 
-                            <button type="submit" class="btn btn-primary mt-2" style={{width:'75%'}}>Sign in</button>
+                            <button type="submit"
+                             class="btn btn-primary mt-2" 
+                             style={{width:'75%'}}
+                             onClick={LoginUser}>Sign in</button>
                         </form>
                         <div class="dropdown-divider"></div>
                     </div>
