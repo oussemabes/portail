@@ -59,8 +59,7 @@ export default function Sendstudydocument() {
         const token = localStorage.getItem('token'); //
 
         const currentDate = new Date();
-        const formattedDate = currentDate.toISOString();
-
+        const formattedDate = currentDate.toISOString().slice(0, 19).replace("T", " ");
 
         console.log(currentDate)
         const formData = new FormData();
@@ -80,7 +79,7 @@ export default function Sendstudydocument() {
         //foncti
         try {
 
-        await axios.post(
+        const resp=await axios.post(
             `http://localhost:3001/backend/participants/create`,
 
             formData,
@@ -92,8 +91,14 @@ export default function Sendstudydocument() {
                 },
             }
         );
-        toast.success("created")
-        window.location.href="/"
+        if (resp.data) {
+            toast.success("Request created successfully");
+
+            // Redirect after a short delay (e.g., 1 second)
+            setTimeout(() => {
+                window.location.href = "/";
+              }, 1000);
+        }
     } catch (error) {
         if (error.response && error.response.status === 400) {
           // Request returned a 400 error status code
@@ -101,7 +106,7 @@ export default function Sendstudydocument() {
           // For example, to get the error message from the server:
           const errorMessage = error.response.data.message;
           // Now you can show the error message to the user or handle it as needed
-          toast.error(errorMessage);
+          toast.error("There is a request that was accepted in this study / The user has not yet answered the last request.");
 
           // Show the error message to the user or perform any other error handling
         } else {

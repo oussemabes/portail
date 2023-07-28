@@ -41,7 +41,7 @@ export default function Loginpage() {
       window.location.href = "/";
     }
   }, [isLoggedIn]);
-  const url = "www.facebook.com"
+  const url = "http://18.197.128.8/"
   const qrCodeSize = 300; // Set the desired size of the QR code in pixels
 
   return (
@@ -111,6 +111,7 @@ export default function Loginpage() {
             </div>
           </div>
         </div>
+        
       </section>
     </>
   )

@@ -6,6 +6,7 @@ import {
 
 } from "react-icons/md";
 import axios from "axios"
+import { toast } from "react-hot-toast";
 
 import { TiTick } from "react-icons/ti";
 
@@ -41,7 +42,12 @@ export default function TableParticipatedStudies(props) {
           await axios.patch(`http://localhost:3001/backend/participants/update/${user_id}/${study_id}/${id}`, {
             state:"accept"
           },{headers});
-          window.location.href="/"
+          toast.success("Request accepted successfully");
+
+          // Redirect after a short delay (e.g., 1 second)
+          setTimeout(() => {
+              window.location.href = "/";
+            }, 1000);
         } catch (error) {
           if (error.response) {
             console.log(error)
@@ -62,7 +68,12 @@ export default function TableParticipatedStudies(props) {
           await axios.patch(`http://localhost:3001/backend/participants/update/${user_id}/${study_id}/${id}`, {
             state:"refuse"
           },{headers});
-          window.location.href="/"
+          toast.success("Request refused successfully");
+
+          // Redirect after a short delay (e.g., 1 second)
+          setTimeout(() => {
+              window.location.href = "/";
+            }, 1000);
 
           
     
@@ -92,7 +103,7 @@ export default function TableParticipatedStudies(props) {
         <tr>
             <td><span style={{ color: "black" }}>{participantedstudy.id}</span></td>
             <td><span style={{ color: "black" }}>{participantedstudy.study_id}</span></td>
-            <td><a href={participantedstudy.document} >click here</a></td>
+            <td><a href={participantedstudy.document}  style={{textDecoration:"none"}}>Click here</a></td>
             <td>            {participantedstudy.state === 'pending' ? (
                 <div className="d-flex text-center ml-0 pl-0 icons">
                             <a title='accept' href='/'  onClick={(e) => accept(participantedstudy.study_id, participantedstudy.user_id,participantedstudy.id, e)}><h3 className="text-center"><TiTick style={{ color: "black" }} /> </h3></a>
