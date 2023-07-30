@@ -101,7 +101,7 @@ export default function Homepage() {
                             <div className="row text-center" >
                                 <div className=" m-auto title">
                                     <h1>{countusers} patients on the list!</h1>
-                                    <button type="button" class="btn btn-primary">Send Invitation</button>
+                                    <button type="button" class="btn btn-primary">Send Justification</button>
                                 </div>
 
                                 <Tableusers users={users} />
