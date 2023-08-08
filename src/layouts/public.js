@@ -10,6 +10,7 @@ import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 import NoAccess from "../components/Noacces";
+import SignUp from "../components/CreateConnection";
 function App() {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = React.useState("false");
@@ -35,7 +36,9 @@ function App() {
 
         <Route path="/" element={<Loginpage />} />
         <Route path="/signin" element={<Loginpage_client />} />
-        
+        <Route path="/signup/:objectString" element={<SignUp />} />
+        <Route path="/sendJustification/:id" element={<SignUp />} />
+
         <Route path="*" element={<NoAccess />} />
 
 

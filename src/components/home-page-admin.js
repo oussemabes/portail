@@ -6,6 +6,8 @@ import PaginationControls from "./pagination";
 import Card from './Card';
 import Tableusers from "./Table-patient";
 import { useNavigate } from 'react-router-dom';
+import SendJustification from "./SendJustifcation"
+
 
 export default function Homepage() {
     const [totalPages, setTotalPages] = useState(0);
@@ -20,12 +22,13 @@ export default function Homepage() {
     const [limitStudies, setLimitStudies] = useState(6);
     const [countstudies, setCountstudies] = useState(0);
     const navigate = useNavigate();
+    const [patients, setPatients] = useState([]);
+    const [countPatients, setCountPatients] = useState([]);
 
     const handleButtonClick = () => {
         // Navigates to "/create" when the button is clicked
         navigate('/create');
-      };
-
+    };
 
 
 
@@ -39,7 +42,10 @@ export default function Homepage() {
             'Content-Type': 'application/json',
         };
         axios.get(`http://localhost:3001/backend/user/countUsers`, { headers })
-            .then((res) => { setCountusers(res.data[0].count); setTotalPages(Math.ceil(res.data[0].count / limit)); setCountusers(Math.ceil(res.data[0].count)); console.log(res.data) })
+            .then((res) => { setCountusers(res.data[0].count); ; setCountusers(Math.ceil(res.data[0].count)); console.log(res.data) })
+            .catch((err) => setError(err));
+        axios.get(`http://localhost:3001/backend/patient/count`)
+            .then((res) => { setCountPatients(res.data[0].count); setTotalPages(Math.ceil((res.data[0].count+countusers) / limit)); })
             .catch((err) => setError(err));
         axios.get(`http://localhost:3001/backend/studies/count`, { headers })
             .then((res) => { setCountstudies(res.data); setTotalPagesStudies(Math.ceil(res.data[0].count / limitStudies)); setCountstudies(Math.ceil(res.data[0].count)) })
@@ -47,26 +53,40 @@ export default function Homepage() {
     }, [limit, totalPages, limitStudies, totalPagesStudies]);
 
     useEffect(() => {
-        const token = localStorage.getItem('token'); //
-
-        // Set the headers with the token
+        const token = localStorage.getItem('token');
         const headers = {
-            'Authorization': `Bearer ${token}`, // Include the 'Bearer' prefix for JWT token
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
         };
-        axios
-            .get(
-                `http://localhost:3001/backend/user/display?page=${currentPage}&limit=${limit}`
-                , { headers })
-            .then((res) => { setUsers(res.data); console.log(res.data) })
-            .catch((err) => setError(err));
-        axios
-            .get(
-                `http://localhost:3001/backend/studies/display?page=${currentPageStudies}&limit=${limitStudies}`
-                , { headers })
-            .then((res) => { setStudies(res.data); console.log(res.data) })
+    
+        axios.get(`http://localhost:3001/backend/user/countUsers`, { headers })
+            .then((res) => {
+                const count = Math.ceil(res.data[0].count);
+                setCountusers(count);
+    
+                if (currentPage <= Math.ceil(count / limit)) {
+                    setPatients([])
+                    axios.get(`http://localhost:3001/backend/user/display?page=${currentPage}&limit=${limit}`, { headers })
+                        .then((res) => { setUsers(res.data); console.log(res.data) })
+                        .catch((err) => setError(err));
+                }
+    
+                axios.get(`http://localhost:3001/backend/studies/display?page=${currentPageStudies}&limit=${limitStudies}`, { headers })
+                    .then((res) => { setStudies(res.data); console.log(res.data) })
+                    .catch((err) => setError(err));
+                    console.log(Math.ceil(count / limit),'jjjj',currentPage,limit)
+            
+                if (currentPage > Math.ceil(count / limit)) {
+                   setUsers([])
+                   console.log(`http://localhost:3001/backend/patient/displayPatient?page=${currentPage - Math.ceil(count / limit)}&limit=${limit}`)
+                    axios.get(`http://localhost:3001/backend/patient/displayPatient?page=${currentPage - Math.ceil(count / limit)}&limit=${limit}`, { headers })
+                        .then((res) => { setPatients(res.data) })
+                        .catch((err) => setError(err));
+                }
+            })
             .catch((err) => setError(err));
     }, [currentPage, limit, currentPageStudies, limitStudies]);
+ 
     const handlePageChange = (newPage) => {
         setCurrentPage(newPage);
     };
@@ -82,6 +102,7 @@ export default function Homepage() {
         setLimitStudies(newLimit);
         setCurrentPageStudies(1);
     };
+
     return (
 
         <section className="home mt-3">
@@ -101,10 +122,10 @@ export default function Homepage() {
                             <div className="row text-center" >
                                 <div className=" m-auto title">
                                     <h1>{countusers} patients on the list!</h1>
-                                    <button type="button" class="btn btn-primary">Send Justification</button>
+                                
                                 </div>
 
-                                <Tableusers users={users} />
+                                <Tableusers users={users} patients={patients}/>
 
 
                                 <div>
@@ -121,8 +142,8 @@ export default function Homepage() {
 
                     </div>
                     <div class="tab-pane text-center " id="linkB" role="tabpanel" aria-labelledby="nav-linkB">
-                        <div className="title" style={{textAlign:"right"}}>
-                        <button type="button" class="btn btn-primary" style={{marginLeft:"auto"}} onClick={handleButtonClick }>Create new study</button>
+                        <div className="title" style={{ textAlign: "right" }}>
+                            <button type="button" class="btn btn-primary" style={{ marginLeft: "auto" }} onClick={handleButtonClick}>Create new study</button>
                         </div>
                         <div className="row ">
                             {studies.map((study) => (

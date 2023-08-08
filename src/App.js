@@ -17,7 +17,8 @@ function App() {
 
   React.useEffect(() => {
     const token = localStorage.getItem("token");
-
+    const token_CI='eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICJlNTYzZjE3Zi0wM2IyLTQ2OTEtYWQ3OC0yNjNhMzE0YzQxMjAiLCAicmVjaXBpZW50S2V5cyI6IFsiRUhSZUhlTVZiUVE1cDZHejFFZG5jRjh0Nm0zd2hzZnR4WHB0clRGeGZwQUciXSwgInNlcnZpY2VFbmRwb2ludCI6ICJodHRwOi8vaG9zdC5kb2NrZXIuaW50ZXJuYWw6ODAyMCIsICJsYWJlbCI6ICJjZW50ZXJJbnYuYWdlbnQifQ'
+    
     if (token) {
       console.log(token);
       const user = jwtDecode(token);

@@ -5,7 +5,6 @@ import axios from "axios"
 import PaginationControls from "./pagination";
 import TableParticipatedStudies from "./table-participated-studies";
 import jwtDecode from "jwt-decode";
-
 export default function Homepage() {
     const [totalPagesStudies, setTotalPagesStudies] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
@@ -21,12 +20,13 @@ export default function Homepage() {
     function sortArrayByDateDescending(arr) {
         return arr.sort((a, b) => new Date(b.date) - new Date(a.date));
     }
-
+    const token = localStorage.getItem('token'); //
+    const user = jwtDecode(token);
 
 
     useEffect(() => {
-        const token = localStorage.getItem('token'); //
-        const user = jwtDecode(token);
+        console.log(user.ref)
+   
         const headers = {
             'Authorization': `Bearer ${token}`, // Include the 'Bearer' prefix for JWT token
             'Content-Type': 'application/json',
@@ -37,6 +37,8 @@ export default function Homepage() {
         axios.get(`http://localhost:3001/backend/participants/countbyacceptedstudies/${user.id}`, { headers })
             .then((res) => { setCountAcceptedStudies(Math.ceil(res.data[0].count)) })
             .catch((err) => setError(err));
+
+
 
 
 
@@ -92,7 +94,7 @@ export default function Homepage() {
                                     <h1>You are participating in {countacceptedStudies} studies!</h1>
                                 </div>
 
-                                <TableParticipatedStudies participantedstudies={participatedStudies} />
+                                <TableParticipatedStudies participantedstudies={participatedStudies} user_id={user.id} />
 
 
                                 <div>
@@ -108,17 +110,17 @@ export default function Homepage() {
                         </div>
 
                     </div>
-                <div class="tab-pane text-center " id="linkB" role="tabpanel" aria-labelledby="nav-linkB">
-                    <div className="title">
-                        <h1>studies on the list!</h1>
-                        <button type="button" class="btn btn-primary" >Create new one</button>
-                    </div>
-                    <div className="row ">
+                    <div class="tab-pane text-center " id="linkB" role="tabpanel" aria-labelledby="nav-linkB">
+                        <div className="title">
+                            <h1>studies on the list!</h1>
+                            <button type="button" class="btn btn-primary" >Create new one</button>
+                        </div>
+                        <div className="row ">
 
 
 
 
-                    </div>
+                        </div>
                     </div>
 
                 </div>
