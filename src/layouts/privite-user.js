@@ -4,34 +4,19 @@ import "boosted/dist/js/boosted";
 
 import { Route, Routes } from "react-router-dom";
 import Footer from '../components/Footer';
-import jwtDecode from "jwt-decode";
-import { useNavigate } from "react-router-dom";
+
 import React from "react";
 import Client from "../components/Home-page-client"
 import Profile from "../components/Profile"
 import NoAccess from "../components/Noacces";
 import SendHealthMes from "../components/Send-health-Mesurments"
 function App(props) {
-  const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = React.useState("false");
-  const [userId, setUserId] = React.useState(0);
-  React.useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      console.log(token);
-      const user = jwtDecode(token);
-   
-      setUserId(user.id);
-      setIsAuthenticated("true");
-      console.log(isAuthenticated)
-      console.log(user.id)
-    }
-  }, []);
+
   return (
     <>
 
 
-      <Navbar isAuthenticated={isAuthenticated} isadmin={props.isadmin}/>
+      <Navbar isAuthenticated={"true"} isadmin={"false"}/>
       <Routes>
         <Route path="/" element={<Client/>} />
         <Route path="/profile" element={<Profile userId={props.user_id}/>} />

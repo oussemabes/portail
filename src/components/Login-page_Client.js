@@ -15,6 +15,9 @@ export default function Loginpage() {
     Axios.post(`http://localhost:8021/connections/create-invitation`, BodyGetUrl)
     .then((res) => { setUrl(res.data.invitation_url);console.log(res.data.invitation_url); setConnectionInformation((JSON.stringify(res.data)));console.log(JSON.stringify(res.data))})
     .catch((err) => setError(err));
+    Axios.get(`http://localhost:8021/connections`)
+    .then((res) => {       formValue.password=res.data.results[0].connection_id   })
+    .catch((err) => setError(err));
     if (isLoggedIn) {
       window.location.href = "/";
     }
@@ -24,11 +27,12 @@ export default function Loginpage() {
   const [connectionInformation,setConnectionInformation]=useState({})
 
   const BodyGetUrl={
-    "recipientKeys": ["did:key:z6MkgrdWJQ1YtZLf4MPYzf5XJXtuoBBXvaG9d6n9iyybYBuR"],
+    "recipientKeys": ["did:key:z6MkgkvoawzSCE1ugzr3hcK3fH2Cy3vWgeijkbF5fm5cy9m3"],
     "serviceEndpoint": "http://host.docker.internal:8020"
   }
   
   const LoginUser = async (e) => {
+    console.log(formValue.password)
     const ProofRequest=
   {
      "presentation_request":{
@@ -166,13 +170,14 @@ export default function Loginpage() {
           </div>
           <div className="col-md-6" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', height: '100%' }}>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <h5 className='align-middle mb-3 pb-3'>If you don't have an account, please scan this <u>QR code</u></h5>
+              <h5 className='align-middle mb-3 pb-3 ml-1 pl-1'>If you don't have a secure connection with the center, please scan this <u>QR code</u></h5>
             </div>
             <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
               <QRCode value={url} size={qrCodeSize} />
-              <a href={`/signup/${encodeURIComponent(connectionInformation)}`}>Same action as qr code</a>
 
             </div>
+            <a href={`/signup/${encodeURIComponent(connectionInformation)}`}>Same action as qr code</a>
+
           </div>
         </div>
         

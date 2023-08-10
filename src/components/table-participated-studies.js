@@ -1,11 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import axios from "axios"
 
-import {
-
-  MdCheckCircleOutline
-
-} from "react-icons/md";
 import { toast } from "react-hot-toast";
 
 import { TiTick } from "react-icons/ti";
@@ -19,7 +14,6 @@ export default function TableParticipatedStudies(props) {
   const [error, setError] = useState(null);
   const [credential_definition_ids, SetCredential_definition_ids] = useState([])
   const [userRef, SetUserRef] = useState(0)
-  const token = localStorage.getItem('token'); //
 
   React.useEffect(() => {
     axios.get(`http://localhost:8031/credential-definitions/created`)
@@ -31,7 +25,7 @@ export default function TableParticipatedStudies(props) {
       })
       .catch((err) => setError(err));
     axios.get(`http://localhost:8031/connections`)
-      .then((res) => {         setConnectionId(res.data.results[0].connection_id);      })
+      .then((res) => { setConnectionId(res.data.results[0].connection_id); })
       .catch((err) => setError(err));
   }, []);
 
@@ -55,8 +49,7 @@ export default function TableParticipatedStudies(props) {
 
     const IssueCred = {
       "connection_id": `${connectionId}`,
-      "cred_def_id": `${credential_definition_ids[0]}`,
-      "comment": "Offer on cred def id HoEgZLguSVSryTtZXJq2y4:3:CL:862569:patient.agent.consent_schema",
+      "comment": "Offer on cred def id W1izxRRSiEwMnm27hCRvWs:3:CL:218730:patient.agent.consent_schema",
       "auto_remove": false,
       "credential_preview": {
         "@type": "https://didcomm.org/issue-credential/2.0/credential-preview",
@@ -75,8 +68,14 @@ export default function TableParticipatedStudies(props) {
           }
         ]
       },
+      "filter": {
+        "indy": {
+          "cred_def_id": `${credential_definition_ids[0]}`
+        }
+      },
       "trace": false
     }
+
     // Set the headers with the token
     const headers = {
       'Authorization': `Bearer ${token}`, // Include the 'Bearer' prefix for JWT token
@@ -87,16 +86,16 @@ export default function TableParticipatedStudies(props) {
       await axios.patch(`http://localhost:3001/backend/participants/update/${user_id}/${study_id}/${id}`, {
         state: "accept"
       }, { headers });
-      const Request={
-        "ref": userRef,  
+      const Request = {
+        "ref": userRef,
         "study_id": study_id,
-        "connection_id":connectionId,
-        "state":"pending",
-        "date":"2023-08-07 16:46:51.000"
-     
+        "connection_id": connectionId,
+        "state": "pending",
+        "date": "2023-08-07 16:46:51.000"
+
       }
-      await axios.post('http://localhost:3004/backend/request/createRequest',Request)
-      const respAgent = await axios.post(`http://localhost:8031/issue-credential/send-offer`, IssueCred);
+      await axios.post('http://localhost:3004/backend/request/createRequest', Request)
+      const respAgent = await axios.post(`http://localhost:8031/issue-credential-2.0/send-offer`, IssueCred);
       if (respAgent) {
         toast.success("Request accepted successfully");
       }

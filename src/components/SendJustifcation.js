@@ -17,12 +17,10 @@ export default function TableParticipants(props) {
         console.log(patient.connection_id)
         const SetSendoffer = {
             "connection_id": patient.connection_id,
-            "auto_issue": false,
+            "comment": "Offer on cred def id GtLBw5FvnrTAYwgTd7B5ag:3:CL:218699:centerInv.agent.patient_schema",
             "auto_remove": false,
-            "comment": "string",
-            "cred_def_id": credential_definition_ids[0],
             "credential_preview": {
-                "@type": "issue-credential/1.0/credential-preview",
+                "@type": "https://didcomm.org/issue-credential/2.0/credential-preview",
                 "attributes": [
                     {
                         "name": "ref",
@@ -43,8 +41,14 @@ export default function TableParticipants(props) {
 
                 ]
             },
-            "trace": true
+            "filter": {
+                "indy": {
+                    "cred_def_id": credential_definition_ids[0]
+                }
+            },
+            "trace": false
         }
+
         console.log(SetSendoffer)
         try {
 
@@ -64,15 +68,16 @@ export default function TableParticipants(props) {
                 }
                 const PatientAddToUsers = await axios.post(`http://localhost:3001/backend/user/register`, user_information);
                 if (PatientAddToUsers) {
-                
+
                     const resp = await axios.post(`http://localhost:3001/backend/disease/create`, {
                         disease_name: patient.disease,
                         user_id: PatientAddToUsers.data.userId,
                     });
-                    if (resp){
-                        window.location.href="/"
+                    if (resp) {
+                         //window.location.href = "/"
+                        console.log(SetSendoffer)
                     }
-                    
+
                 }
 
             }

@@ -4,7 +4,8 @@ import { toast } from "react-hot-toast";
 import Axios from "axios";
 import jwtDecode from "jwt-decode";
 
-export default function SendHealthMesurments() {
+export default function SendHealthMesurments(props) {
+    console.log(props.user_id)
     const token = localStorage.getItem('token'); //
     const user = jwtDecode(token);
     const [formValue, setFormValue] = useState({

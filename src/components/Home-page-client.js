@@ -5,7 +5,7 @@ import axios from "axios"
 import PaginationControls from "./pagination";
 import TableParticipatedStudies from "./table-participated-studies";
 import jwtDecode from "jwt-decode";
-export default function Homepage() {
+export default function Homepage(props) {
     const [totalPagesStudies, setTotalPagesStudies] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(5);
@@ -25,7 +25,6 @@ export default function Homepage() {
 
 
     useEffect(() => {
-        console.log(user.ref)
    
         const headers = {
             'Authorization': `Bearer ${token}`, // Include the 'Bearer' prefix for JWT token

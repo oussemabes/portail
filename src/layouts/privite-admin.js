@@ -6,35 +6,20 @@ import { Route, Routes } from "react-router-dom";
 import Homepage from '../components/home-page-admin';
 import Footer from '../components/Footer';
 import Sendstudydocument from "../components/send-study-document"
-import jwtDecode from "jwt-decode";
-import { useNavigate } from "react-router-dom";
+
 import React from "react";
 import NoAccess from "../components/Noacces";
 import Add_New_Study from "../components/add-new-study";
-function App() {
-  const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = React.useState("false");
-  const [userId, setUserId] = React.useState(0);
-  React.useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      console.log(token);
-      const user = jwtDecode(token);
-   
-      setUserId(user.id);
-      setIsAuthenticated("true");
-      console.log(isAuthenticated)
-      console.log(user.id)
-    }
-  }, []);
+function App(props) {
+ 
   return (
     <>
 
 
-      <Navbar isAuthenticated={isAuthenticated}/>
+      <Navbar isAuthenticated={"true"}/>
       <Routes>
 
-        <Route path="/" element={<Homepage />} />
+        <Route path="/" element={<Homepage user_id={props.user_id}/>} />
         <Route path="/Sendstudydocument/:id" element={<Sendstudydocument />} />
         <Route path="/create" element={<Add_New_Study/>} />
 

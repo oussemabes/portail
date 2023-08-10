@@ -29,7 +29,7 @@ const Add_New_Patient = async (e) => {
 
       if (resp.data && respConnection.data) {
 
-        window.location.href = "/signin";
+        window.location.href = "/";
 
       }
     } catch (error) {
