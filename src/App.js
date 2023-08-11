@@ -17,12 +17,11 @@ function App() {
 
   React.useEffect(() => {
     const token = localStorage.getItem("token");
-
+    
     if (token) {
       console.log(token);
       const user = jwtDecode(token);
       setUserId(user.id);
-      console.log(userId);
       if (user) {
         setIsAuthenticated(true);
         const headers = {
@@ -45,7 +44,7 @@ function App() {
     } else {
       setLoading(false);
     }
-  }, []);
+  }, [userId]);
 
   // Render a loading state until authentication check is complete
   if (loading) {

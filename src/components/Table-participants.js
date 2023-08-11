@@ -75,6 +75,7 @@ export default function TableParticipants(props) {
 
                     </tr>
                 ))}
+                
             </tbody>
         </table>
     )

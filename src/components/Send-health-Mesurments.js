@@ -3,8 +3,12 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import Axios from "axios";
 import jwtDecode from "jwt-decode";
+import { useParams } from "react-router-dom";
 
-export default function SendHealthMesurments() {
+export default function SendHealthMesurments(props) {
+    let { study_id } = useParams();
+
+    console.log(props.user_id)
     const token = localStorage.getItem('token'); //
     const user = jwtDecode(token);
     const [formValue, setFormValue] = useState({
@@ -31,6 +35,7 @@ export default function SendHealthMesurments() {
         try {
             const resp = await Axios.post(`http://localhost:3001/backend/HealthMeasurement/create`, {
                 user_id:formValue.user_id,
+                study_id:study_id,
                 date:`${year}-${month}-${day}`,
                 heart_beat: formValue.heart_beat,
                 temperature: formValue.temperature,
