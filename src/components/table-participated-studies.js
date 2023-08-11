@@ -151,6 +151,8 @@ export default function TableParticipatedStudies(props) {
           <th scope="col" style={{ color: "black" }}>Relative document</th>
           <th scope="col" style={{ color: "black" }}>State</th>
           <th scope="col" style={{ color: "black" }}>Date</th>
+          <th scope="col" style={{ color: "black" }}>Action</th>
+
 
         </tr>
       </thead>
@@ -171,7 +173,7 @@ export default function TableParticipatedStudies(props) {
               <h3><TbXboxX style={{ color: "black" }} /> </h3>
             )}</td>
             <td><span style={{ color: "black" }}>{getNormalizedDate(participantedstudy.date)}</span></td>
-
+              {participantedstudy.state === 'accept' ? <td><button class='btn btn-primary' onClick={()=>window.location.href=`/HealthMeasurements/${participantedstudy.study_id}`}>Send Health Measurement</button> </td>:<td><></></td>}
           </tr>
         ))}
       </tbody>

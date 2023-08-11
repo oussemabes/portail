@@ -20,7 +20,7 @@ function App(props) {
       <Routes>
         <Route path="/" element={<Client/>} />
         <Route path="/profile" element={<Profile userId={props.user_id}/>} />
-        <Route path="/HealthMeasurements" element={<SendHealthMes userId={props.user_id}/>} />
+        <Route path="/HealthMeasurements/:study_id" element={<SendHealthMes userId={props.user_id}/>} />
 
         <Route path="*" element={<NoAccess />} />
 

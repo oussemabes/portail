@@ -173,7 +173,7 @@ export default function Loginpage() {
               <h5 className='align-middle mb-3 pb-3 ml-1 pl-1'>If you don't have a secure connection with the center, please scan this <u>QR code</u></h5>
             </div>
             <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
-              <QRCode value={url} size={qrCodeSize} />
+              <QRCode value={`http://localhost:3000/signup/${encodeURIComponent(connectionInformation)}`} size={qrCodeSize} />
 
             </div>
             <a href={`/signup/${encodeURIComponent(connectionInformation)}`}>Same action as qr code</a>

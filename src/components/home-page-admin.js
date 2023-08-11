@@ -68,7 +68,7 @@ export default function Homepage() {
             .then((res) => {
                 const count = Math.ceil(res.data[0].count);
                 setCountusers(count);
-                if (currentPage < Math.ceil(count / limit)) {
+                if (currentPage <= Math.ceil(count / limit)) {
                     setPatients([])
                     axios.get(`http://localhost:3001/backend/user/display?page=${currentPage}&limit=${limit}`, { headers })
                         .then((res) => { setUsers(res.data); console.log(res.data) })

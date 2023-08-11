@@ -34,9 +34,7 @@ export default function Sidebar(props) {
                   <li class="nav-item">
                     <a className={currentHref === "http://localhost:3000/profile" ? "nav-link active" : "nav-link"} aria-current="page" href="/profile">profile</a>
                   </li>
-                  <li class="nav-item">
-                    <a className={currentHref === "http://localhost:3000/HealthMeasurements" ? "nav-link active" : "nav-link"} aria-current="page" href="/HealthMeasurements">Send Health Measurement</a>
-                  </li>
+               
                 </>
                 : <></>
             }
