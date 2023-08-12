@@ -13,109 +13,149 @@ export default function Loginpage() {
 
   React.useEffect(() => {
     Axios.post(`http://localhost:8021/connections/create-invitation`, BodyGetUrl)
-    .then((res) => { setUrl(res.data.invitation_url);console.log(res.data.invitation_url); setConnectionInformation((JSON.stringify(res.data)));console.log(JSON.stringify(res.data))})
-    .catch((err) => setError(err));
+      .then((res) => { setUrl(res.data.invitation_url); console.log(res.data.invitation_url); setConnectionInformation((JSON.stringify(res.data))); console.log(JSON.stringify(res.data)) })
+      .catch((err) => setError(err));
     Axios.get(`http://localhost:8021/connections`)
-    .then((res) => {       formValue.password=res.data.results[0].connection_id   })
-    .catch((err) => setError(err));
+      .then((res) => { formValue.password = res.data.results[0].connection_id })
+      .catch((err) => setError(err));
+
     if (isLoggedIn) {
       window.location.href = "/";
     }
-  }, [isLoggedIn]);
-  const [url,setUrl]=useState("")
-  const [error, setError] = useState(null);
-  const [connectionInformation,setConnectionInformation]=useState({})
 
-  const BodyGetUrl={
+  }, [isLoggedIn]);
+  const [url, setUrl] = useState("")
+  const [error, setError] = useState(null);
+  const [connectionInformation, setConnectionInformation] = useState({})
+
+  const BodyGetUrl = {
     "recipientKeys": ["did:key:z6MkgkvoawzSCE1ugzr3hcK3fH2Cy3vWgeijkbF5fm5cy9m3"],
     "serviceEndpoint": "http://host.docker.internal:8020"
   }
-  
+
   const LoginUser = async (e) => {
     console.log(formValue.password)
-    const ProofRequest=
-  {
-     "presentation_request":{
-        "indy":{
-           "name":"Proof of The patient",
-           "version":"1.0",
-           "requested_attributes":{
-              "0_ref_uuid":{
-                 "name":"ref",
-                 "restrictions":[
-                    {
-                       "schema_name":"patient schema"
-                    }
-                 ]
-              },
-              "0_gender_uuid":{
-                 "name":"gender",
-                 "restrictions":[
-                    {
-                       "schema_name":"patient schema"
-                    }
-                 ]
-              },
-              "0_disease_uuid":{
-                 "name":"disease",
-                 "restrictions":[
-                    {
-                       "schema_name":"patient schema"
-                    }
-                 ]
-              },
-              "0_date_uuid":{
-                 "name":"date",
-                 "restrictions":[
-                    {
-                       "schema_name":"patient schema"
-                    }
-                 ]
-              }
-           },
-           "requested_predicates":{
-              "0_ref_GE_uuid":{
-                 "name":"ref",
-                 "p_type":">",
-                 "p_value":1,
-                 "restrictions":[
-                    {
-                       "schema_name":"patient schema"
-                    }
-                 ]
-              }
-           }
-        }
-     },
-     "trace":false,
-     "connection_id":`${formValue.password}`
-  }
+
     e.preventDefault();
     try {
-      const resp = await Axios.post(`http://localhost:3001/backend/user/logiN`, {
-        email: `${formValue.reference}@portail.com`,
-        password: formValue.password,
-      });
-      const respAgent = await Axios.post(`http://localhost:8021/present-proof-2.0/send-request`, ProofRequest);
-     
-
-      if (resp.data && respAgent.data) {
-        localStorage.setItem("token", resp.data);
-        setisLoggedIn(true);
-        toast.success("Welcome back :)", {
-          position: "bottom-center",
-          duration: 5000,
+      const newCredentialsResponse = await Axios.get(`http://localhost:3001/backend/patient/GetConnectionIdByref/${formValue.reference}`)
+      if (newCredentialsResponse.data.length > 0) {
+        const ProofRequest =
+        {
+          "presentation_request": {
+            "indy": {
+              "name": "Proof of The patient",
+              "version": "1.0",
+              "requested_attributes": {
+                "0_ref_uuid": {
+                  "name": "ref",
+                  "restrictions": [
+                    {
+                      "schema_name": "patient schema"
+                    }
+                  ]
+                },
+                "0_gender_uuid": {
+                  "name": "gender",
+                  "restrictions": [
+                    {
+                      "schema_name": "patient schema"
+                    }
+                  ]
+                },
+                "0_disease_uuid": {
+                  "name": "disease",
+                  "restrictions": [
+                    {
+                      "schema_name": "patient schema"
+                    }
+                  ]
+                },
+                "0_date_uuid": {
+                  "name": "date",
+                  "restrictions": [
+                    {
+                      "schema_name": "patient schema"
+                    }
+                  ]
+                }
+              },
+              "requested_predicates": {
+                "0_ref_GE_uuid": {
+                  "name": "ref",
+                  "p_type": ">",
+                  "p_value": 1,
+                  "restrictions": [
+                    {
+                      "schema_name": "patient schema"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "trace": false,
+          "connection_id": `${newCredentialsResponse.data[0].connection_id}`
+        }
+        const respAgent = await Axios.post(`http://localhost:8021/present-proof-2.0/send-request`, ProofRequest);
+        const resp = await Axios.post(`http://localhost:3001/backend/user/logiN`, {
+          email: `${formValue.reference}@portail.com`,
+          password: newCredentialsResponse.data[0].connection_id,
         });
+
+
+        if (resp.data && respAgent.data) {
+          localStorage.setItem("token", resp.data);
+          setisLoggedIn(true);
+          toast.success("Welcome back :)", {
+            position: "bottom-center",
+            duration: 5000,
+          });
+        }
+
       }
-      
-    
-  
+      else {
+        // Handle login error after retry
+        toast.error('Please first make a secure connection :)');
+      }
     } catch (error) {
-      if (error.response) {
-        console.log(error)
-        toast.error("Please enter a valid Email/Password");
+      if(error.response.status === 400){
+        toast.error('Please scan the QR code to make a secure connection again')
+        return;
       }
+
+      const newCredentialsResponse = await Axios.get(`http://localhost:3001/backend/patient/GetConnectionIdByref/${formValue.reference}`)
+      if (newCredentialsResponse.data.length > 0) {
+
+        console.log(newCredentialsResponse.data[0].connection_id)
+        const secondresp = await Axios.post(`http://localhost:3001/backend/user/logiN`, {
+          email: `${formValue.reference}@portail.com`,
+          password: `${newCredentialsResponse.data[0].connection_id}`,
+        });
+
+        if (secondresp.data) {
+          // Successful login logic after retry
+          // localStorage.setItem("token", secondresp.data);
+          // setisLoggedIn(true);
+          toast.success("Welcome back :)", {
+            position: "bottom-center",
+            duration: 5000,
+          });
+        } else {
+          // Handle login error after retry
+          toast.error('Please make a secure connection :)');
+        }
+      }
+      // Retry login with new credentials
+      else {
+        // Handle login error after retry
+        toast.error('Please first make a secure connection :)');
+      }
+
+
     }
+
+
   };
   const onChange = (e) => {
     setFormValue({ ...formValue, [e.target.name]: e.target.value });
@@ -125,7 +165,7 @@ export default function Loginpage() {
   const qrCodeSize = 300; // Set the desired size of the QR code in pixels
 
   return (
-    <> 
+    <>
       <section className="home mt-4 mt-3 pt-3 pb-3">
         <ol class="breadcrumb ml-4 pl-4">
           <li class="breadcrumb-item "><a href="\">Home</a></li>
@@ -180,7 +220,7 @@ export default function Loginpage() {
 
           </div>
         </div>
-        
+
       </section>
     </>
   )
