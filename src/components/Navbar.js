@@ -49,7 +49,7 @@ export default function Sidebar(props) {
           <button class="btn btn-primary btn-inverse" style={{ display: "none" }} type="submit">Search</button>
         </form>
         {props.isAuthenticated === "false" ?
-          <a title='Log In' href='/login' className='logouticon' style={{ color: "white" }}> <h1> <BiLogIn /></h1></a> :
+          <a title='Log In' href='/' className='logouticon' style={{ color: "white" }}> <h1> <BiLogIn /></h1></a> :
           <a title='Log Out' href='/' className='logouticon' style={{ color: "white" }} onClick={Logout}> <h1> <BiLogOut /></h1></a>
         }
       </div>

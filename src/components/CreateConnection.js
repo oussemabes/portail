@@ -46,7 +46,9 @@ function SignUp(props) {
         toast.error("Please enter a valid reference")
         console.log(error)
       }
-      if (error.response.status === 500) {
+      if (error.response.status === 500 || error.response.status === 403) {
+        console.log(error.response.status)
+
         const SetSendoffer = {
           "connection_id": receivedObject.connection_id,
           "comment": "Offer on cred def id GtLBw5FvnrTAYwgTd7B5ag:3:CL:218699:centerInv.agent.patient_schema",
