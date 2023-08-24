@@ -164,11 +164,11 @@ export default function TableParticipatedStudies(props) {
             <td><a href={participantedstudy.document} style={{ textDecoration: "none" }}>Click here</a></td>
             <td>            {participantedstudy.state === 'pending' ? (
               <div className="d-flex text-center ml-0 pl-0 icons">
-                <a title='accept' href='/' onClick={(e) => accept(participantedstudy.study_id, participantedstudy.user_id, participantedstudy.id, e)}><h3 className="text-center"><TiTick style={{ color: "black" }} /> </h3></a>
-                <a title='refuse' href='/' onClick={(e) => refuse(participantedstudy.study_id, participantedstudy.user_id, participantedstudy.id, e)}> <h3 className="text-center"><GiCancel style={{ color: "black" }} /> </h3></a>
+                <a title='Accept study' href='/' onClick={(e) => accept(participantedstudy.study_id, participantedstudy.user_id, participantedstudy.id, e)}><h3 className="text-center"><TiTick style={{ color: "green" }} /> </h3></a>
+                <a title='Refuse study' href='/' onClick={(e) => refuse(participantedstudy.study_id, participantedstudy.user_id, participantedstudy.id, e)}> <h3 className="text-center"><GiCancel style={{ color: "red" }} /> </h3></a>
               </div>
             ) : participantedstudy.state === 'accept' ? (
-              <button type="button" class="btn btn-danger" onClick={(e) => refuse(participantedstudy.study_id, participantedstudy.user_id, participantedstudy.id, e)}>Remove acces</button>
+              <button type="button" class="btn btn-danger"  onClick={(e) => refuse(participantedstudy.study_id, participantedstudy.user_id, participantedstudy.id, e)}>Remove acces</button>
             ) : (
               <h3><TbXboxX style={{ color: "black" }} /> </h3>
             )}</td>

@@ -27,11 +27,20 @@ export default function Loginpage() {
   const [url, setUrl] = useState("")
   const [error, setError] = useState(null);
   const [connectionInformation, setConnectionInformation] = useState({})
+  const test={
+    "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/connections/1.0/invitation",
+    "@id": "41ebd1d4-59f8-462f-aa2c-aca5c025313d",
+    "recipientKeys": [
+      "7N9GUxHNkpKrCxzZFghcshQou2HMj7XFRfcSaSx8QqTV"
+    ],
+    "label": "centerInv.agent",
+    "serviceEndpoint": "https://b25a-41-62-103-75.ngrok-free.app"
+  }
+  const jsonString = JSON.stringify(test);
+  console.log(jsonString)
 
   const BodyGetUrl = {
-    "recipientKeys": ["did:key:z6MkgkvoawzSCE1ugzr3hcK3fH2Cy3vWgeijkbF5fm5cy9m3"],
-    "serviceEndpoint": "http://host.docker.internal:8020"
-  }
+    "recipientKeys": ["did:key:z6MkuR7iK49CE8bMYUKWJdzTePxXnhHk5YtpsonopEme5E8H"], "serviceEndpoint": "http://host.docker.internal:8020"}
 
   const LoginUser = async (e) => {
     console.log(formValue.password)
@@ -184,7 +193,7 @@ export default function Loginpage() {
                   class="form-control"
                   id="validationCustom01"
                   placeholder='reference'
-                  style={{ width: "75%" }}
+                  style={{ width: "50%" }}
                   value={formValue.reference}
                   onChange={onChange}
                   required />
@@ -203,8 +212,8 @@ export default function Loginpage() {
 
               <button type="submit"
                 class="btn btn-primary mt-2"
-                style={{ width: '75%' }}
-                onClick={LoginUser}>Send Proof Request</button>
+                style={{ width: '50%' }}
+                onClick={LoginUser}>Connection</button>
             </form>
             <div class="dropdown-divider"></div>
           </div>
@@ -216,7 +225,7 @@ export default function Loginpage() {
               <QRCode value={`http://localhost:3000/signup/${encodeURIComponent(connectionInformation)}`} size={qrCodeSize} />
 
             </div>
-            <a href={`/signup/${encodeURIComponent(connectionInformation)}`}>Same action as qr code</a>
+            <a href={`http://localhost:3000/signup/${encodeURIComponent(connectionInformation)}`}>same as qr code</a>
 
           </div>
         </div>

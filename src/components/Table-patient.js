@@ -126,7 +126,7 @@ export default function Tableusers(props) {
                         <td><h3><FaEye style={{ color: "black" }} user_id={patient.id} /> </h3></td>
                         <td><h3><BiCommentDots style={{ color: "#172B4D" }} /> </h3></td>
                         <td>           <button type="button" class="btn btn-primary" onClick={() => Add_New_Patient(patient)}>
-                            Send Credential
+                            Send Cnx Credential
                         </button> </td>
 
 

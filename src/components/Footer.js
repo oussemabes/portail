@@ -2,9 +2,9 @@ import React from 'react'
 
 export default function Footer() {
     return (
-        <div className="mainfooter">
+        <div className="mainfooter" >
         
-            <footer class="footer bg-dark navbar-dark">
+            <footer class="footer bg-dark navbar-dark "  style={{bottom:"0"}}>
                 <h2 class="visually-hidden">Sitemap & information</h2>
                 <div class="container-xxl footer-social">
                     <h3 class="footer-heading me-md-3">Follow us</h3>
