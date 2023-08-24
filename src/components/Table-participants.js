@@ -65,8 +65,8 @@ export default function TableParticipants(props) {
 
                         <td>            {participant.state === 'pending' ? (
                             <h3><BiLoader style={{ color: "black" }} /> </h3>
-                        ) : participant.state === 'accept' ? (
-                            <h3><MdCheckCircleOutline style={{ color: "black" }} /> </h3>
+                        ) : participant.state === 'accepted' ? (
+                            <h3><MdCheckCircleOutline title="accepted" style={{ color: "black" }} /> </h3>
                         ) : (
                             <h3><TbXboxX style={{ color: "black" }} /> </h3>
                         )}</td>

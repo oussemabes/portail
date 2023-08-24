@@ -140,7 +140,7 @@ export default function Homepage() {
                                 <div>
                                     <PaginationControls
                                         currentPage={currentPage}
-                                        totalPages={totalPages}
+                                        totalPages={2}
                                         handlePageChange={handlePageChange}
                                         handleLimitChange={handleLimitChange}
                                     />

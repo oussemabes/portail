@@ -7,6 +7,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
 }
 
 code {
@@ -28,10 +29,9 @@ code {
 }
 
 .mainfooter {
-  width: 100%;
-  height: 160px;
   bottom: 0;
   left: 0;
+  flex-shrink: 0;
 
     /* Add styles for the footer */
 }
